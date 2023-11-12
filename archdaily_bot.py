@@ -89,7 +89,7 @@ async def audify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                      audio=status,
                                      duration=duration,
                                      performer= 'Bot',
-                                     title='Summary'
+                                     title='Summary',
                                      caption=f"Audio duration: {duration} seconds")
         os.remove(status)
     except:
