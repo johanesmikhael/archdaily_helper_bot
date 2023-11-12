@@ -4,6 +4,8 @@ from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 import audiofile
 from keys import TELEGRAM_KEY
+from archdaily_summarizer import response
+from archdaily_summarizer import text2speech
 
 import subprocess
 import codecs
@@ -63,8 +65,9 @@ async def summarize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Get url and summarize the content"""
     try:
         url = str(context.args[0])
-        status = subprocess.check_output(f"python archdaily_summarizer.py --url {url}")
-        status = codecs.decode(status, 'utf-8')
+        # status = subprocess.check_output(f"python archdaily_summarizer.py --url {url}")
+        # status = codecs.decode(status, 'utf-8')
+        status = response(url)
         # await update.effective_message.reply_text(status)
         if len(status) > 4096:
             partitions = partition_string(status)
@@ -81,8 +84,10 @@ async def audify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Get url and summarize+audify the content"""
     try:
         url = str(context.args[0])
-        status = subprocess.check_output(f"python archdaily_summarizer.py --url {url} --audify 1 --chatid {chat_id}")
-        status = codecs.decode(status, 'utf-8')
+        # status = subprocess.check_output(f"python archdaily_summarizer.py --url {url} --audify 1 --chatid {chat_id}")
+        # status = codecs.decode(status, 'utf-8')
+        text = response(url)
+        status = text2speech(text, chat_id)
         signal, sampling_rate = audiofile.read(status, always_2d=True)
         duration = int(signal.shape[1] / sampling_rate)
         await context.bot.send_audio(chat_id=chat_id,

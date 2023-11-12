@@ -130,12 +130,11 @@ def response(input):
         return 'not a valid url'
     
     
-def audify(text, chat_id):
+def text2speech(text, chat_id):
     API_URL = 'https://api-inference.huggingface.co/models/facebook/fastspeech2-en-ljspeech'
     headers = {'Authorization': f'Bearer {HUGGING_FACE_KEY}'}
     response = requests.post(API_URL, headers=headers, json={'inputs':text})
     audio = response.content
-    # print(response.content)
     if not os.path.isdir('temp'):
         os.makedirs('temp')
     audio_path = f'temp/summary_{chat_id}.wav'
@@ -154,6 +153,6 @@ if __name__ == '__main__':
         sys.stdout.buffer.write(b)
     else:
         chat_id = opts.chatid
-        output = audify(output, chat_id)
+        output = text2speech(output, chat_id)
         b = bytes(output, 'utf-8')
         sys.stdout.buffer.write(b)
