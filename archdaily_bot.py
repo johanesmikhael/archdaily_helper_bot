@@ -88,7 +88,8 @@ async def audify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await context.bot.send_audio(chat_id=chat_id,
                                      audio=status,
                                      duration=duration,
-                                     performer= 'Summarizer_Bot',
+                                     performer= 'Bot',
+                                     title='Summary'
                                      caption=f"Audio duration: {duration} seconds")
         os.remove(status)
     except:
