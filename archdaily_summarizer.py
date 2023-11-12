@@ -13,7 +13,7 @@ from keys import OPENAI_KEY, HUGGING_FACE_KEY
 
 from cleantext import clean
 import validators
-
+import os
 
 client = OpenAI(
     api_key=OPENAI_KEY,
@@ -136,6 +136,8 @@ def audify(text, chat_id):
     response = requests.post(API_URL, headers=headers, json={'inputs':text})
     audio = response.content
     # print(response.content)
+    if not os.path.isdir('temp'):
+        os.makedirs('temp')
     audio_path = f'temp/summary_{chat_id}.wav'
     decoded = miniaudio.decode(audio, sample_rate = 16000)
     miniaudio.wav_write_file(audio_path, decoded)
